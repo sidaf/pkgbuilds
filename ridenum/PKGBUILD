@@ -1,0 +1,40 @@
+pkgname='ridenum'
+pkgver=59.31c08aa
+pkgrel=1
+pkgdesc='A null session RID cycle attack for brute forcing domain controllers.'
+url='https://github.com/trustedsec/ridenum'
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('python2' 'smbclient')
+makedepends=('git' 'python2-pip')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/trustedsec/ridenum.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/${pkgname}"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  install -d "vendor/lib/python2.7/site-packages/"
+  cat >> requirements.txt << "EOF"
+pexpect
+EOF
+  PYTHONUSERBASE="${srcdir}/${pkgname}-${pkgver}/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='ridenum.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

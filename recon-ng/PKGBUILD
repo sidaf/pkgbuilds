@@ -1,0 +1,32 @@
+pkgname='recon-ng'
+pkgver='4.9.2'
+pkgrel=1
+pkgdesc='A full-featured Web Reconnaissance framework written in Python.'
+url='https://bitbucket.org/LaNMaSteR53/recon-ng'
+arch=('i686' 'x86_64')
+license=('GPL3')
+depends=('python2' 'libxml2' 'libxslt')
+makedepends=('python2-pip')
+options=('!strip' '!emptydirs')
+source=("https://bitbucket.org/LaNMaSteR53/recon-ng/get/v${pkgver}.tar.bz2")
+sha1sums=('8268544878d91740f149878b7787cce212bad7a4')
+
+build() {
+  cd "${srcdir}/LaNMaSteR53-recon-ng-70d967e3f530"
+  install -d "vendor/lib/python2.7/site-packages/"
+  PYTHONUSERBASE="${srcdir}/LaNMaSteR53-recon-ng-70d967e3f530/vendor" pip2 install --user --ignore-installed --requirement REQUIREMENTS
+}
+
+package() {
+  cd "$srcdir/LaNMaSteR53-recon-ng-70d967e3f530"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r . "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='recon-ng recon-cli recon-rpc recon-web'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

@@ -1,0 +1,38 @@
+pkgname='cewl'
+pkgver='5.3'
+pkgrel=1
+pkgdesc='A custom word list generator'
+url="http://www.digininja.org/projects/cewl.php"
+arch=('i686' 'x86_64')
+license=('CCPL')
+depends=('ruby2.3' 'ruby2.3-bundler' 'perl-image-exiftool' 'libxml2' 'libxslt')
+options=('!strip' '!emptydirs')
+source=("https://github.com/digininja/CeWL/archive/${pkgver}.tar.gz")
+sha1sums=('c9f5325dd360384cc4712e2ffbb428e7fa1f56be')
+
+prepare() {
+  cd "$srcdir/CeWL-$pkgver"
+  bundle-2.3 config build.nokogiri --use-system-libraries
+  sed "s/require '.\/cewl_lib'/require '\/opt\/${pkgname}\/cewl_lib'/" -i cewl.rb
+  sed "s/require \".\/cewl_lib.rb\"/require '\/opt\/${pkgname}\/cewl_lib'/" -i fab.rb
+}
+
+build() {
+  cd "$srcdir/CeWL-$pkgver"
+  bundle-2.3 install -j"$(nproc)" --no-cache --path vendor/bundle
+  find vendor/bundle/ruby -exec chmod o+r '{}' \;
+}
+
+package() {
+  cd "$srcdir/CeWL-$pkgver"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r . "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='cewl.rb fab.rb'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nGEM_HOME=/usr/share/${pkgname}/vendor/bundle BUNDLE_GEMFILE=/usr/share/${pkgname}/Gemfile bundle-2.3 exec ruby-2.3 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

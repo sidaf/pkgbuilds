@@ -1,0 +1,38 @@
+pkgname='wafw00f'
+pkgver=0.9.4
+pkgrel=1
+pkgdesc="Identifies and fingerprints Web Application Firewall (WAF) products."
+url="https://github.com/sandrogauci/wafw00f"
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('python2')
+makedepends=('python2-pip' 'python2-setuptools')
+options=('!strip' '!emptydirs')
+source=("https://pypi.python.org/packages/25/90/5330680a141f399a6511dcd35ceed8521a02086dff6a985424cc0712fb54/wafw00f-$pkgver.tar.gz")
+sha512sums=('88426f9512d9933f8d13bbe6a439d0b8f9346ab0dcca11cc031383b06685e44d3e597b86e0d4ad0e72069982b5853b33c6489cc9c005d40b9acb7101eff91a7d')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cat >> requirements.txt << "EOF"
+beautifulsoup4==4.4.1
+pluginbase==0.3
+EOF
+  install -d "vendor/lib/python2.7/site-packages/"
+  PYTHONUSERBASE="${srcdir}/${pkgname}-${pkgver}/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  python2 setup.py --no-user-cfg install --prefix="$pkgdir/usr/share/${pkgname}" --single-version-externally-managed --record=installed.txt
+  #cp -r vendor ${pkgname} "$pkgdir/usr/share/${pkgname}"
+  cp -r vendor "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='wafw00f'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}/lib/python2.7/site-packages:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/bin/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

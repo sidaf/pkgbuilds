@@ -1,0 +1,41 @@
+pkgname='whatweb'
+pkgver=4194.039768f4
+pkgrel=1
+pkgdesc='Next generation web scanner that identifies what websites are running.'
+url='http://www.morningstarsecurity.com/research/whatweb'
+arch=('i686' 'x86_64')
+license=('CCPL')
+depends=('ruby2.3' 'ruby2.3-bundler')
+makedepends=('git')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/urbanadventurer/WhatWeb.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/WhatWeb"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd "$srcdir/WhatWeb"
+  cat >> Gemfile << "EOF"
+source 'https://rubygems.org'
+gem 'json'
+EOF
+  bundle-2.3 install -j"$(nproc)" --no-cache --path vendor/bundle
+  find vendor/bundle/ruby -exec chmod o+r '{}' \;
+}
+
+package() {
+  cd "$srcdir/WhatWeb"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * .bundle "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='whatweb'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nGEM_HOME=/usr/share/${pkgname}/vendor/bundle BUNDLE_GEMFILE=/usr/share/${pkgname}/Gemfile bundle-2.3 exec ruby-2.3 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

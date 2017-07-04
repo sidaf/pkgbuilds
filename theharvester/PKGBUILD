@@ -1,0 +1,43 @@
+pkgname='theharvester'
+pkgver=56.eb08d32
+pkgrel=2
+groups=('blackarch' 'blackarch-recon')
+pkgdesc='Python tool for gathering e-mail accounts and subdomain names from different public sources (search engines, pgp key servers).'
+url='http://www.edge-security.com/theHarvester.php'
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('python2')
+makedepends=('git' 'python2-pip')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/laramies/theHarvester.git')
+sha1sums=('SKIP')
+
+
+pkgver() {
+  cd "$srcdir/theHarvester"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd "${srcdir}/theHarvester"
+  cat >> requirements.txt << "EOF"
+requests
+shodan
+EOF
+  install -d "vendor/lib/python2.7/site-packages/"
+  PYTHONUSERBASE="${srcdir}/theHarvester/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "${srcdir}/theHarvester"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='theHarvester.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

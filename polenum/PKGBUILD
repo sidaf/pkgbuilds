@@ -1,0 +1,39 @@
+pkgname='polenum'
+pkgver='0.2'
+pkgrel=1
+pkgdesc='A python script to extract the password policy information from a windows machine.'
+url="http://labs.portcullis.co.uk/application/polenum/"
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('python2')
+makedepends=('python2-pip')
+options=('!strip' '!emptydirs')
+source=("http://labs.portcullis.co.uk/download/polenum-${pkgver}.tar.bz2")
+sha1sums=('1591a8635de714d4f9bff799cf7dc7e6bb5dfa69')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cat >> requirements.txt << "EOF"
+impacket==0.9.13
+pyasn1==0.2.3
+pycrypto==2.6.1
+EOF
+  install -d "vendor/lib/python2.7/site-packages/"
+  PYTHONUSERBASE="${srcdir}/${pkgname}-${pkgver}/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  chmod 755 polenum.py
+  chmod 644 LICENSE README
+  cp -r . "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='polenum.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}
