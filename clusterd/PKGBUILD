@@ -1,0 +1,33 @@
+pkgname='clusterd'
+pkgver=0.5
+pkgrel=1
+pkgdesc='Automates the fingerprinting, reconnaissance, and exploitation phases of an application server attack.'
+url='https://github.com/hatRiot/clusterd'
+arch=('i686' 'x86_64')
+license=('MIT')
+depends=('python2' 'java-environment')
+makedepends=('python2-pip')
+options=('!strip' '!emptydirs')
+source=("https://github.com/hatRiot/clusterd/archive/${pkgver}.tar.gz")
+sha1sums=('4ed0beb551a871964a57f5a669a1320dc22c1d2e')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -d "vendor/lib/python2.7/site-packages/"
+  PYTHONUSERBASE="${srcdir}/${pkgname}-${pkgver}/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+  chmod u+rwX,g+rwX,o+rX -R "$pkgdir/usr/share/${pkgname}/src"
+
+  local _binaries='clusterd.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\ncd /usr/share/${pkgname} && PYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 $bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

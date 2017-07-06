@@ -1,0 +1,28 @@
+pkgname=sslscan
+pkgver=1.11.10
+pkgrel=1
+pkgdesc="A tool to scan SSL and TLS based services, to determine what ciphers and protocols are supported"
+url='https://github.com/rbsec/sslscan'
+arch=('i686' 'x86_64')
+license=('GPL3')
+makedepends=('git' 'perl')
+source=("https://github.com/rbsec/sslscan/archive/${pkgver}-rbsec.tar.gz")
+sha1sums=('b0ef2b5831275b4a2e553e8c73e3f2be1a84ffa8')
+
+prepare() {
+  cd ${pkgname}-${pkgver}-rbsec
+  sed 's/LDFLAGS      \+=/LDFLAGS      =/' -i Makefile
+  sed 's/CFLAGS       \+=/CFLAGS       =/' -i Makefile
+}
+
+build() {
+  cd ${pkgname}-${pkgver}-rbsec
+  make static
+}
+
+package() {
+  cd ${pkgname}-${pkgver}-rbsec
+  install -d "$pkgdir/usr/bin"
+  install -Dm755 sslscan "$pkgdir/usr/bin"
+  install -Dm644 sslscan.1 "$pkgdir/usr/man/man1"
+}

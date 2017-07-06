@@ -1,0 +1,50 @@
+pkgname='responder'
+pkgver=2.3.3.6
+pkgrel=1
+pkgdesc='A LLMNR, NBT-NS and MDNS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server supporting NTLMv1/NTLMv2/LMv2, Extended 
+Security NTLMSSP and Basic HTTP authentication'
+url='https://github.com/lgandx/Responder/'
+license=('GPL3')
+arch=('any')
+depends=('python2')
+makedepends=('git' 'python2-pip')
+source=("https://github.com/lgandx/${pkgname}/archive/v${pkgver}.tar.gz")
+sha256sums=('269245554f7d67ebc29c1f7c97f43521cd5c445fddd77f8c1bf733a3b43ca400')
+
+prepare() {
+  cd "${srcdir}/Responder-${pkgver}"
+  
+  sed "s|self.LogDir = os.path.join(self.ResponderPATH, 'logs')|self.LogDir = '.'|" -i settings.py
+}
+
+build() {
+  cd "${srcdir}/Responder-${pkgver}"
+
+  install -d "vendor/lib/python2.7/site-packages/"
+  cat >> requirements.txt << "EOF"
+pycrypto
+pyopenssl
+EOF
+  PYTHONUSERBASE="${srcdir}/${pkgname}/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "${srcdir}/Responder-${pkgver}"
+
+  install -d "$pkgdir/usr/bin" "${pkgdir}/usr/share/${pkgname}"
+  cp -r * "${pkgdir}/usr/share/${pkgname}"
+
+  local _binaries='Responder.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+
+  local _binaries='MultiRelay.py RunFinger.py Icmp-Redirect.py FindSQLSrv.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/tools/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

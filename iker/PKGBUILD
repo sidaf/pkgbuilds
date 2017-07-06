@@ -1,0 +1,23 @@
+pkgname='iker'
+pkgver=1.1
+pkgrel=1
+pkgdesc='A tool to analyse the security of the key exchange phase in IPsec based VPNs.'
+url='http://labs.portcullis.co.uk/tools/iker/'
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('python2' 'ike-scan')
+options=('!strip' '!emptydirs')
+source=("http://labs.portcullis.co.uk/download/${pkgname}_v${pkgver}.tar")
+sha256sums=('8780805a0743f60e42ec75dd56dcdb8beb1fdafc75aab6dcdac7ba13e126e7b6')
+
+package() {
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  install -Dm755 iker.py "$pkgdir/usr/share/${pkgname}/iker.py"
+
+  local _binaries='iker.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nexec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

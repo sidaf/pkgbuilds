@@ -1,0 +1,58 @@
+pkgname='simplyemail'
+pkgver=521.50e6063
+pkgrel=1
+pkgdesc='Email recon made fast and easy, with a framework to build on http://CyberSyndicates.com.'
+url='https://github.com/killswitch-GUI/SimplyEmail'
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('python2' 'libxml2' 'libxslt' 'antiword' 'odt2txt' 'wget')
+makedepends=('git' 'python2-pip')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/killswitch-GUI/SimplyEmail.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/SimplyEmail"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd "$srcdir/SimplyEmail"
+  find . -type f -exec sed "s|read('Common/SimplyEmail.ini')|read('/usr/share/${pkgname}/Common/SimplyEmail.ini')|g" -i {} \;
+  sed 's|".SimplyEmail.log"|"SimplyEmail.log"|' -i Helpers/helpers.py
+}
+
+build() {
+  cd "$srcdir/SimplyEmail"
+  install -d "vendor/lib/python2.7/site-packages/"
+  cat >> requirements.txt << "EOF"
+lxml
+beautifulsoup4
+python-magic
+fake-useragent
+mechanize
+docx2txt
+requests
+xlsx2csv
+configparser==3.3.0r2
+BeautifulSoup
+pdfminer
+dnspython
+EOF
+  PYTHONUSERBASE="${srcdir}/SimplyEmail/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
+}
+
+package() {
+  cd "$srcdir/SimplyEmail"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='SimplyEmail.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    #echo -e "#!/bin/sh\ncd /usr/share/${pkgname} && PYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 $bin \"\${@}\"" > "${_wrapper}"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

@@ -1,0 +1,31 @@
+pkgname='bettercap'
+pkgver='1.6.1'
+pkgrel=1
+pkgdesc='A complete, modular, portable and easily extensible MITM framework.'
+url='https://github.com/evilsocket/bettercap'
+arch=('i686' 'x86_64')
+license=('GPL3')
+depends=('ruby2.3')
+makedepends=('git' 'libpcap')
+options=('!strip' '!emptydirs')
+source=("git+https://github.com/evilsocket/${pkgname}.git#tag=v${pkgver}")
+sha1sums=('SKIP')
+
+build() {
+  cd "$srcdir/${pkgname}"
+  gem-2.3 build bettercap.gemspec
+}
+
+package() {
+  cd "$srcdir/${pkgname}"
+  install -d "${pkgdir}/usr/bin" "${pkgdir}/usr/share/${pkgname}"
+
+  GEM_HOME="${pkgdir}/usr/share/${pkgname}" gem-2.3 install --no-document ${pkgname}-${pkgver}.gem
+
+  local _binaries='bettercap'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nGEM_HOME=/usr/share/${pkgname} ruby-2.3 /usr/share/${pkgname}/bin/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}
