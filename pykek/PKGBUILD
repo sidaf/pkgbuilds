@@ -1,0 +1,31 @@
+pkgname='pykek'
+pkgver=12.651b9ba
+pkgrel=1
+pkgdesc='Kerberos Exploitation Kit.'
+url='https://github.com/bidord/pykek'
+arch=('any')
+license=('custom')
+depends=('python2')
+makedepends=('git')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/bidord/pykek.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/${pkgname}"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='ms14-068.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

@@ -1,0 +1,23 @@
+pkgname='seclists'
+pkgver=356.43e28e3
+pkgrel=1
+pkgdesc='A collection of multiple types of lists used during security assessments. List types include usernames, passwords, URLs, sensitive data grep strings, fuzzing payloads, and many more.'
+url='https://github.com/danielmiessler/SecLists'
+arch=('any')
+license=('custom')
+makedepends=('git')
+source=('git+https://github.com/danielmiessler/SecLists.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/SecLists"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd "$srcdir/SecLists"
+
+  install -d "${pkgdir}/usr/share/${pkgname}"
+  cp -r * "${pkgdir}/usr/share/${pkgname}"
+}

@@ -1,0 +1,31 @@
+pkgname='powerserver'
+pkgver=4.1b60af8
+pkgrel=1
+pkgdesc="Serves up pre-existing powershell modules over HTTP, for use with Metasploit's Interactive Powershell Payloads."
+url='https://github.com/awhitehatter/powerserver'
+arch=('any')
+license=('custom')
+depends=('python2')
+makedepends=('git')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/awhitehatter/powerserver.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/${pkgname}"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='powerserver.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}

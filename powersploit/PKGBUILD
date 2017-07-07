@@ -1,0 +1,23 @@
+pkgname='powersploit'
+pkgver=476.c7985c9
+pkgrel=1
+pkgdesc='A PowerShell Post-Exploitation Framework.'
+url='https://github.com/mattifestation/PowerSploit'
+arch=('any')
+license=('BSD')
+makedepends=('git')
+source=('git+https://github.com/mattifestation/PowerSploit.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/PowerSploit"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd "$srcdir/PowerSploit"
+
+  install -d "${pkgdir}/usr/share/${pkgname}"
+  cp -r * "${pkgdir}/usr/share/${pkgname}"
+}

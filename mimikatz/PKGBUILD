@@ -1,0 +1,18 @@
+pkgname=mimikatz
+pkgver=2.1.1.20170618
+pkgrel=1
+groups=('archstrike' 'archstrike-exploit')
+arch=('any')
+pkgdesc="A little tool to play with Windows security"
+url="https://github.com/gentilkiwi/mimikatz"
+license=('custom')
+options=(!strip)
+source=("https://github.com/gentilkiwi/mimikatz/releases/download/${pkgver/.2/-2}/mimikatz_trunk.zip")
+sha1sums=("dc9e997e3427a8e1f8664eb4c783aad48bab6519")
+
+package() {
+  cd ${srcdir}
+  install -d "${pkgdir}/usr/share/${pkgname}"
+  rm mimikatz_trunk.zip
+  cp -r * "${pkgdir}/usr/share/${pkgname}"
+}

@@ -1,0 +1,17 @@
+pkgname='laudanum'
+pkgver='1.0'
+pkgrel=1
+pkgdesc="A collection of injectable files, designed to be used in a pentest when SQL injection flaws are found and are in multiple languages for different environments."
+url="http://laudanum.inguardians.com/#"
+arch=('any')
+license=('GPL')
+source=("http://downloads.sourceforge.net/project/laudanum/laudanum-$pkgver/laudanum-$pkgver.tgz")
+sha1sums=('abc026b889dfcae010278daa3439cb9a67abaf06')
+
+package() {
+  cd "$srcdir/${pkgname}"
+
+  install -d "$pkgdir/usr/share/${pkgname}"
+
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+}
