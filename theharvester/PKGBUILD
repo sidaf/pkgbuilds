@@ -1,4 +1,5 @@
-pkgname='theharvester'
+_pkgname='theharvester'
+pkgname="${_pkgname}-git"
 pkgver=56.eb08d32
 pkgrel=2
 groups=('blackarch' 'blackarch-recon')

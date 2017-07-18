@@ -1,4 +1,5 @@
-pkgname='vlan-hopping'
+_pkgname='vlan-hopping'
+pkgname="${_pkgname}-git"
 pkgver=23.ab6bde0
 pkgrel=1
 pkgdesc='Simple VLAN enumeration and hopping script'

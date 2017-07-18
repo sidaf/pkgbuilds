@@ -1,4 +1,5 @@
-pkgname='fuzzdb'
+_pkgname='fuzzdb'
+pkgname="${_pkgname}-git"
 pkgver=404.ecb0850
 pkgrel=1
 pkgdesc='Dictionary of attack patterns and primitives for black-box application fault injection and resource discovery.'
@@ -10,13 +11,13 @@ source=('git+https://github.com/fuzzdb-project/fuzzdb.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/${pkgname}"
+  cd "$srcdir/${_pkgname}"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/${pkgname}"
+  cd "$srcdir/${_pkgname}"
 
   install -d "${pkgdir}/usr/share/${pkgname}"
   cp -r * "${pkgdir}/usr/share/${pkgname}"

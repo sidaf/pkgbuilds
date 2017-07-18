@@ -1,4 +1,5 @@
-pkgname='pykek'
+_pkgname='pykek'
+pkgname="${pykek}-git"
 pkgver=12.651b9ba
 pkgrel=1
 pkgdesc='Kerberos Exploitation Kit.'
@@ -12,12 +13,12 @@ source=('git+https://github.com/bidord/pykek.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/${pkgname}"
+  cd "$srcdir/${_pkgname}"
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${_pkgname}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * "$pkgdir/usr/share/${pkgname}"

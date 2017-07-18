@@ -1,4 +1,5 @@
-pkgname='whatweb'
+_pkgname='whatweb'
+pkgname="${_pkgname}-git"
 pkgver=4194.039768f4
 pkgrel=1
 pkgdesc='Next generation web scanner that identifies what websites are running.'

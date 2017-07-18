@@ -1,4 +1,5 @@
-pkgname='powersploit'
+_pkgname='powersploit'
+pkgname="${_pkgname}-git"
 pkgver=476.c7985c9
 pkgrel=1
 pkgdesc='A PowerShell Post-Exploitation Framework.'

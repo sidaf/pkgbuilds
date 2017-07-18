@@ -1,4 +1,5 @@
-pkgname='seclists'
+_pkgname='seclists'
+pkgname="${_pkgname}-git"
 pkgver=356.43e28e3
 pkgrel=1
 pkgdesc='A collection of multiple types of lists used during security assessments. List types include usernames, passwords, URLs, sensitive data grep strings, fuzzing payloads, and many more.'

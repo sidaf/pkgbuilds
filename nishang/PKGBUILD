@@ -1,4 +1,5 @@
-pkgname='nishang'
+_pkgname='nishang'
+pkgname="${_pkgname}-git"
 pkgver=252.80005b2
 pkgrel=1
 pkgdesc='Scripts and payloads which enables usage of PowerShell for offensive security, penetration testing, and red teaming.'
@@ -10,13 +11,13 @@ source=('git+https://github.com/samratashok/nishang.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/${pkgname}"
+  cd "$srcdir/${_pkgname}"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/${pkgname}"
+  cd "$srcdir/${_pkgname}"
 
   install -d "${pkgdir}/usr/share/${pkgname}"
   cp -r * "${pkgdir}/usr/share/${pkgname}"
