@@ -1,5 +1,5 @@
 pkgname='magic-unicorn'
-pkgver=67.885f5c0
+pkgver=69.254a40f
 pkgrel=1
 pkgdesc='A simple tool for using a PowerShell downgrade attack and inject shellcode straight into memory.'
 url='https://github.com/trustedsec/unicorn'

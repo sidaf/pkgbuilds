@@ -1,5 +1,5 @@
 _pkgname='simplyemail'
-pkgname="${_pkgnaqme}-git"
+pkgname="${_pkgname}-git"
 pkgver=521.50e6063
 pkgrel=1
 pkgdesc='Email recon made fast and easy, with a framework to build on http://CyberSyndicates.com.'

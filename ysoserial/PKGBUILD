@@ -1,6 +1,6 @@
 _pkgname='ysoserial'
 pkgname="${_pkgname}-git"
-pkgver=77.ca38b73
+pkgver=79.35bce8f
 pkgrel=1
 pkgdesc='A proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization.'
 arch=('any')
