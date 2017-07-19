@@ -1,5 +1,5 @@
 _pkgname='pykek'
-pkgname="${pykek}-git"
+pkgname="${_pkgname}-git"
 pkgver=12.651b9ba
 pkgrel=1
 pkgdesc='Kerberos Exploitation Kit.'
