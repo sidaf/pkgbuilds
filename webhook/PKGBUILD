@@ -1,0 +1,32 @@
+pkgname='webhook'
+pkgver=2.6.4
+pkgrel=1
+pkgdesc="webhook is a lightweight configurable tool that allows you to easily create HTTP endpoints (hooks) on your server, which can be used to execute configured commands."
+url="https://github.com/adnanh/$pkgname/"
+arch=('x86_64' 'i686')
+license=('MIT')
+makedepends=('git go')
+options=('!strip' '!emptydirs')
+source=("git+https://github.com/adnanh/$pkgname.git#tag=$pkgver")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "$pkgname"
+
+  go get -d -v -t ./...
+}
+
+build() {
+  cd "$pkgname"
+
+  go build
+}
+
+package() {
+  cd "$pkgname"
+
+  install -Dm755 "${pkgname}" "${pkgdir}/usr/bin/${pkgname}"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -Dm644 README.md "${pkgdir}/usr/share/${pkgname}/README.md"
+  install -Dm644 hooks.json.example "${pkgdir}/usr/share/${pkgname}/hooks.json.example"
+}
