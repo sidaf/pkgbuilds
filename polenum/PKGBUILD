@@ -1,6 +1,8 @@
+DLAGENTS=("https::/usr/bin/curl -k -o %o %u")
+
 pkgname='polenum'
 pkgver='0.2'
-pkgrel=1
+pkgrel=2
 pkgdesc='A python script to extract the password policy information from a windows machine.'
 url="http://labs.portcullis.co.uk/application/polenum/"
 arch=('i686' 'x86_64')
@@ -8,7 +10,7 @@ license=('custom')
 depends=('python2')
 makedepends=('python2-pip')
 options=('!strip' '!emptydirs')
-source=("http://labs.portcullis.co.uk/download/polenum-${pkgver}.tar.bz2")
+source=("https://labs.portcullis.co.uk/download/polenum-${pkgver}.tar.bz2")
 sha1sums=('1591a8635de714d4f9bff799cf7dc7e6bb5dfa69')
 
 build() {
