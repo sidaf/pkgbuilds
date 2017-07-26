@@ -11,7 +11,6 @@ source=("http://www.nothink.org/codes/snmpcheck/snmpcheck-${pkgver}.rb")
 sha1sums=('8edef3cb7ef066b13673a0778a2052d18ce1474b')
 
 build() {
-  cd "$srcdir"
   cat >> Gemfile << "EOF"
 source 'https://rubygems.org'
 gem 'snmp'
@@ -21,8 +20,6 @@ EOF
 }
 
 package() {
-  cd "$srcdir"
-
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   install -Dm755 snmpcheck-${pkgver}.rb "$pkgdir/usr/share/${pkgname}/snmpcheck-${pkgver}.rb"
   cp -r Gemfile Gemfile.lock vendor .bundle "$pkgdir/usr/share/${pkgname}/"

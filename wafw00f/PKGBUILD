@@ -12,7 +12,8 @@ source=("https://pypi.python.org/packages/25/90/5330680a141f399a6511dcd35ceed852
 sha512sums=('88426f9512d9933f8d13bbe6a439d0b8f9346ab0dcca11cc031383b06685e44d3e597b86e0d4ad0e72069982b5853b33c6489cc9c005d40b9acb7101eff91a7d')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
+
   cat >> requirements.txt << "EOF"
 beautifulsoup4==4.4.1
 pluginbase==0.3
@@ -22,7 +23,7 @@ EOF
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   python2 setup.py --no-user-cfg install --prefix="$pkgdir/usr/share/${pkgname}" --single-version-externally-managed --record=installed.txt

@@ -12,7 +12,7 @@ source=("git+https://github.com/stasinopoulos/commix.git#tag=v1.9-20170502")
 sha1sums=('SKIP')
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${pkgname}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * "$pkgdir/usr/share/${pkgname}"

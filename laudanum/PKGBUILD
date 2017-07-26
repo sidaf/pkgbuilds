@@ -9,7 +9,7 @@ source=("http://downloads.sourceforge.net/project/laudanum/laudanum-$pkgver/laud
 sha1sums=('abc026b889dfcae010278daa3439cb9a67abaf06')
 
 package() {
-  cd "$srcdir/${pkgname}"
+  cd "${pkgname}"
 
   install -d "$pkgdir/usr/share/${pkgname}"
 

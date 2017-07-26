@@ -12,13 +12,14 @@ source=("https://github.com/darkoperator/dnsrecon/archive/v${pkgver}.tar.gz")
 sha256sums=('c3b99b423919ed877dd75893212c0365c1491f2abca3de411cee04c467d8500a')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
+
   install -d "vendor/lib/python2.7/site-packages/"
   PYTHONUSERBASE="${srcdir}/${pkgname}-${pkgver}/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r . "$pkgdir/usr/share/${pkgname}"

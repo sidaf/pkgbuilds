@@ -9,22 +9,24 @@ license=('custom')
 depends=('python2' 'libxml2' 'libxslt' 'antiword' 'odt2txt' 'wget')
 makedepends=('git' 'python2-pip')
 options=('!strip' '!emptydirs')
-source=('git+https://github.com/killswitch-GUI/SimplyEmail.git')
+source=('git+https://github.com/killswitch-GUI/simplyemail.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/SimplyEmail"
+  cd "${_pkgname}"
+
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/SimplyEmail"
+  cd "${_pkgname}"
+
   find . -type f -exec sed "s|read('Common/SimplyEmail.ini')|read('/usr/share/${pkgname}/Common/SimplyEmail.ini')|g" -i {} \;
   sed 's|".SimplyEmail.log"|"SimplyEmail.log"|' -i Helpers/helpers.py
 }
 
 build() {
-  cd "$srcdir/SimplyEmail"
+  cd "SimplyEmail"
   install -d "vendor/lib/python2.7/site-packages/"
   cat >> requirements.txt << "EOF"
 lxml

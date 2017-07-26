@@ -10,17 +10,19 @@ license=('custom')
 depends=('python2')
 makedepends=('git' 'python2-pip')
 options=('!strip' '!emptydirs')
-source=('git+https://github.com/laramies/theHarvester.git')
+source=('git+https://github.com/laramies/theharvester.git')
 sha1sums=('SKIP')
 
 
 pkgver() {
-  cd "$srcdir/theHarvester"
+  cd "${_pkgname}"
+
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "${srcdir}/theHarvester"
+  cd "${_pkgname}"
+
   cat >> requirements.txt << "EOF"
 requests
 shodan
@@ -30,7 +32,7 @@ EOF
 }
 
 package() {
-  cd "${srcdir}/theHarvester"
+  cd "${_pkgname}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * "$pkgdir/usr/share/${pkgname}"

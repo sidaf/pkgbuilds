@@ -12,13 +12,13 @@ source=("https://github.com/lgandx/${pkgname}/archive/v${pkgver}.tar.gz")
 sha256sums=('269245554f7d67ebc29c1f7c97f43521cd5c445fddd77f8c1bf733a3b43ca400')
 
 prepare() {
-  cd "${srcdir}/Responder-${pkgver}"
+  cd "Responder-${pkgver}"
   
   sed "s|self.LogDir = os.path.join(self.ResponderPATH, 'logs')|self.LogDir = '.'|" -i settings.py
 }
 
 build() {
-  cd "${srcdir}/Responder-${pkgver}"
+  cd "Responder-${pkgver}"
 
   install -d "vendor/lib/python2.7/site-packages/"
   cat >> requirements.txt << "EOF"
@@ -29,7 +29,7 @@ EOF
 }
 
 package() {
-  cd "${srcdir}/Responder-${pkgver}"
+  cd "Responder-${pkgver}"
 
   install -d "$pkgdir/usr/bin" "${pkgdir}/usr/share/${pkgname}"
   cp -r * "${pkgdir}/usr/share/${pkgname}"

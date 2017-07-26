@@ -1,4 +1,3 @@
-# Maintainer: Jonathan Liu <net147@gmail.com>
 pkgname=nfsshell
 pkgver=19980519
 pkgrel=1
@@ -16,17 +15,15 @@ md5sums=('d447235518691fc3176ce89a6d836ce7'
          'd1305abf7d53b470f136495cfc1480ae')
 
 build() {
-  cd "$srcdir/nfs"
+  cd "nfs"
 
   patch -Np1 -i "$srcdir/gcc.patch" || return 1
   make
 }
 
 package() {
-  cd "$srcdir/nfs"
+  cd "nfs"
 
   install -D -m755 nfs "$pkgdir/usr/bin/nfsshell"
   install -D -m644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-
-# vim:set ts=2 sw=2 et:

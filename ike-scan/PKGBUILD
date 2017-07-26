@@ -10,11 +10,13 @@ source=("https://github.com/royhills/ike-scan/releases/download/1.9/${pkgname}-$
 sha256sums=('05d15c7172034935d1e46b01dacf1101a293ae0d06c0e14025a4507656f1a7b6')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
+
   ./configure --prefix=/usr --mandir=/usr/share/man --with-openssl
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
+
   make DESTDIR="${pkgdir}" install
 }

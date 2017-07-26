@@ -10,18 +10,17 @@ source=("http://downloads.sourceforge.net/project/dirb/dirb/${pkgver}/dirb${pkgv
 sha1sums=('21851ad341357917a9672c834ccf90509c957f75')
 
 prepare() {
-  cd "${srcdir}"
   chmod -R 744 dirb${pkgver//./}
 }
 
 build () {
-  cd "${srcdir}/dirb${pkgver//./}"
+  cd "dirb${pkgver//./}"
   ./configure --prefix=/usr
   make
 }
 
 package() {
-  cd "${srcdir}/dirb${pkgver//./}"
+  cd "dirb${pkgver//./}"
 
   make DESTDIR="${pkgdir}" install
 

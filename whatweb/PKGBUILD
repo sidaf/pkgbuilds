@@ -9,16 +9,18 @@ license=('CCPL')
 depends=('ruby2.3' 'ruby2.3-bundler')
 makedepends=('git')
 options=('!strip' '!emptydirs')
-source=('git+https://github.com/urbanadventurer/WhatWeb.git')
+source=('git+https://github.com/urbanadventurer/whatweb.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/WhatWeb"
+  cd "${_pkgname}"
+
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/WhatWeb"
+  cd "${_pkgname}"
+
   cat >> Gemfile << "EOF"
 source 'https://rubygems.org'
 gem 'json'
@@ -28,7 +30,7 @@ EOF
 }
 
 package() {
-  cd "$srcdir/WhatWeb"
+  cd "${_pkgname}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * .bundle "$pkgdir/usr/share/${pkgname}"

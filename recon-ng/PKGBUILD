@@ -12,13 +12,14 @@ source=("https://bitbucket.org/LaNMaSteR53/recon-ng/get/v${pkgver}.tar.bz2")
 sha1sums=('8268544878d91740f149878b7787cce212bad7a4')
 
 build() {
-  cd "${srcdir}/LaNMaSteR53-recon-ng-70d967e3f530"
+  cd "LaNMaSteR53-recon-ng-70d967e3f530"
+
   install -d "vendor/lib/python2.7/site-packages/"
   PYTHONUSERBASE="${srcdir}/LaNMaSteR53-recon-ng-70d967e3f530/vendor" pip2 install --user --ignore-installed --requirement REQUIREMENTS
 }
 
 package() {
-  cd "$srcdir/LaNMaSteR53-recon-ng-70d967e3f530"
+  cd "LaNMaSteR53-recon-ng-70d967e3f530"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r . "$pkgdir/usr/share/${pkgname}"

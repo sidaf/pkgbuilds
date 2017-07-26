@@ -12,13 +12,13 @@ source=('git+https://github.com/commonexploits/vlan-hopping.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/vlan-hopping"
+  cd "${_pkgname}"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/vlan-hopping"
+  cd "${_pkgname}"
 
   install -Dm755 frogger2.sh "$pkgdir/usr/bin/frogger2.sh"
   install -Dm644 README.md "$pkgdir/usr/share/doc/vlan-hopping/README.md"

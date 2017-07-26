@@ -11,13 +11,13 @@ source=('git+https://github.com/fuzzdb-project/fuzzdb.git')
 sha1sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/${_pkgname}"
+  cd "${_pkgname}"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/${_pkgname}"
+  cd "${_pkgname}"
 
   install -d "${pkgdir}/usr/share/${pkgname}"
   cp -r * "${pkgdir}/usr/share/${pkgname}"

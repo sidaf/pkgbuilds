@@ -12,12 +12,14 @@ source=("git+https://github.com/evilsocket/${pkgname}.git#tag=v${pkgver}")
 sha1sums=('SKIP')
 
 build() {
-  cd "$srcdir/${pkgname}"
+  cd "${pkgname}"
+
   gem-2.3 build bettercap.gemspec
 }
 
 package() {
-  cd "$srcdir/${pkgname}"
+  cd "${pkgname}"
+
   install -d "${pkgdir}/usr/bin" "${pkgdir}/usr/share/${pkgname}"
 
   GEM_HOME="${pkgdir}/usr/share/${pkgname}" gem-2.3 install --no-document ${pkgname}-${pkgver}.gem

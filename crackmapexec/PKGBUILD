@@ -12,19 +12,21 @@ source=("git+https://github.com/byt3bl33d3r/CrackMapExec.git#tag=v${pkgver}")
 sha1sums=('SKIP')
 
 prepare() {
-  cd "${srcdir}/CrackMapExec"
+  cd "CrackMapExec"
+
   git submodule init && git submodule update --recursive
 }
 
 build() {
-  cd "${srcdir}/CrackMapExec"
+  cd "CrackMapExec"
+
   install -d "vendor/lib/python2.7/site-packages/"
   echo "setuptools" >> requirements.txt
   PYTHONUSERBASE="${srcdir}/CrackMapExec/vendor" pip2 install --user --ignore-installed --requirement requirements.txt
 }
 
 package() {
-  cd "${srcdir}/CrackMapExec"
+  cd "CrackMapExec"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   python2 setup.py --no-user-cfg install --prefix="$pkgdir/usr/share/${pkgname}" --single-version-externally-managed --record=installed.txt

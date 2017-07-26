@@ -12,12 +12,14 @@ source=("$pkgname::git+$url")
 sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/${pkgname}"
+  cd "${pkgname}"
+
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "${srcdir}/${pkgname}"
+  cd "${pkgname}"
+
   install -d "vendor/lib/python2.7/site-packages/"
   cat >> requirements.txt << "EOF"
 pyip
@@ -28,7 +30,7 @@ EOF
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${pkgname}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * "$pkgdir/usr/share/${pkgname}"
