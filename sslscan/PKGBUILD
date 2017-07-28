@@ -1,6 +1,6 @@
 pkgname=sslscan
 pkgver=1.11.10
-pkgrel=1
+pkgrel=2
 pkgdesc="A tool to scan SSL and TLS based services, to determine what ciphers and protocols are supported"
 url='https://github.com/rbsec/sslscan'
 arch=('i686' 'x86_64')
@@ -22,7 +22,7 @@ build() {
 
 package() {
   cd ${pkgname}-${pkgver}-rbsec
-  install -d "$pkgdir/usr/bin"
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/man/man1"
   install -Dm755 sslscan "$pkgdir/usr/bin"
-  install -Dm644 sslscan.1 "$pkgdir/usr/man/man1"
+  install -Dm644 sslscan.1 "$pkgdir/usr/share/man/man1"
 }
