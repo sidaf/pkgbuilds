@@ -1,7 +1,7 @@
 _pkgname='patator'
 pkgname="${_pkgname}-git"
 pkgver=138.02783fb
-pkgrel=1
+pkgrel=2
 pkgdesc='A multi-purpose brute-forcer, with a modular design and a flexible usage.'
 url='https://github.com/lanjelot/patator'
 arch=('i686' 'x86_64')
@@ -45,7 +45,7 @@ package() {
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * "$pkgdir/usr/share/${pkgname}"
 
-  local _binaries="${pkgname}.py"
+  local _binaries="${_pkgname}.py"
   for bin in $_binaries; do
     local _wrapper="$pkgdir/usr/bin/$bin"
     echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}:/usr/share/${pkgname}/vendor/lib/python2.7/site-packages" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
