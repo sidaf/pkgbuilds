@@ -1,11 +1,11 @@
 pkgname='python2-google'
 pkgver='1.9.3'
-pkgrel=2
+pkgrel=3
 pkgdesc='Python bindings to the Google search engine.'
 arch=('any')
-url='https://pypi.python.org/pypi/google/'
+url='https://github.com/MarioVilas/google'
 license=('BSD')
-depends=('python2')
+depends=('python2' 'python2-beautifulsoup4')
 makedepends=('python2-setuptools')
 source=("https://pypi.python.org/packages/0d/c3/5e0dd8b9e1b6af70c50394e6b777b8bfccfd895d2e4c70c171e060680a8f/google-${pkgver}.tar.gz")
 sha1sums=('dd5562bf75f29bce404b53b469853ba99dc7839c')
