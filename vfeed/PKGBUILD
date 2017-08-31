@@ -1,0 +1,35 @@
+pkgname='vfeed'
+pkgver=0.7.2
+pkgrel=1
+pkgdesc='Correlated Vulnerability And Threat Intelligence Database API'
+url='https://vfeed.io/'
+arch=('any')
+license=('custom')
+depends=('python2')
+makedepends=('git')
+options=('!strip' '!emptydirs')
+source=('git+https://github.com/toolswatch/vfeed.git')
+sha1sums=('SKIP')
+
+prepare() {
+  cd "${pkgname}"
+
+  sed -e "s|^db = .*$|db = '/usr/share/${pkgname}/vfeed.db'|" -i config/constants.py
+  sed -e "s|^db_location = .*$|db_location = '/usr/share/${pkgname}/vfeed.db'|" -i config/constants.py
+  sed -e "s|^export_dir = .*$|export_dir = '.'|" -i config/constants.py
+  sed -e "s|^csv_dir = .*$|csv_dir = './'|" -i config/constants.py
+}
+
+package() {
+  cd "${pkgname}"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
+  cp -r * "$pkgdir/usr/share/${pkgname}"
+
+  local _binaries='vfeedcli.py'
+  for bin in $_binaries; do
+    local _wrapper="$pkgdir/usr/bin/$bin"
+    echo -e "#!/bin/sh\nPYTHONPATH="/usr/share/${pkgname}" exec python2 /usr/share/${pkgname}/$bin \"\${@}\"" > "${_wrapper}"
+    chmod 755 "${_wrapper}"
+  done
+}
