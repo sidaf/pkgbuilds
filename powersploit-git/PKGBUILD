@@ -1,13 +1,13 @@
 _pkgname='powersploit'
 pkgname="${_pkgname}-git"
 pkgver=476.c7985c9
-pkgrel=1
+pkgrel=2
 pkgdesc='A PowerShell Post-Exploitation Framework.'
-url='https://github.com/mattifestation/PowerSploit'
+url='https://github.com/PowerShellMafia/PowerSploit'
 arch=('any')
 license=('BSD')
 makedepends=('git')
-source=('git+https://github.com/mattifestation/powersploit.git')
+source=('git+https://github.com/PowerShellMafia/powersploit.git')
 sha1sums=('SKIP')
 
 pkgver() {

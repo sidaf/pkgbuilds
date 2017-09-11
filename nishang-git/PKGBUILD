@@ -1,6 +1,6 @@
 _pkgname='nishang'
 pkgname="${_pkgname}-git"
-pkgver=253.a187574
+pkgver=256.f616c1d
 pkgrel=1
 pkgdesc='Scripts and payloads which enables usage of PowerShell for offensive security, penetration testing, and red teaming.'
 url='https://github.com/samratashok/nishang'
