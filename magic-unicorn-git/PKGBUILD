@@ -1,5 +1,6 @@
-pkgname='magic-unicorn'
-pkgver=2.8
+_pkgname='magic-unicorn'
+pkgname="${_pkgname}-git"
+pkgver=70.c3a9222
 pkgrel=1
 pkgdesc='A simple tool for using a PowerShell downgrade attack and inject shellcode straight into memory.'
 url='https://github.com/trustedsec/unicorn'
@@ -8,12 +9,17 @@ license=('custom')
 depends=('python2')
 makedepends=('git')
 options=('!strip' '!emptydirs')
-conflicts=('magic-unicorn-git')
-source=("$pkgname::git+$url.git#tag=${pkgver}")
+conflicts=('magic-unicorn')
+source=("$_pkgname::git+$url")
 sha512sums=('SKIP')
 
+pkgver() {
+  cd "${_pkgname}"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
 package() {
-  cd "${pkgname}"
+  cd "${_pkgname}"
 
   install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/${pkgname}"
   cp -r * "$pkgdir/usr/share/${pkgname}"

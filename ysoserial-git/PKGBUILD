@@ -1,5 +1,6 @@
-pkgname='ysoserial'
-pkgver=0.0.5
+_pkgname='ysoserial'
+pkgname="${_pkgname}-git"
+pkgver=79.35bce8f
 pkgrel=1
 pkgdesc='A proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization.'
 arch=('any')
@@ -8,18 +9,24 @@ license=('MIT')
 depends=('java-environment')
 makedepends=('git' 'maven')
 options=('!strip' '!emptydirs')
-conflicts=('ysoserial-git')
-source=("${pkgname}::git+https://github.com/frohoff/ysoserial.git#tag=${pkgver}")
+conflicts=('ysoserial')
+source=('git+https://github.com/frohoff/ysoserial.git')
 sha1sums=('SKIP')
 
+pkgver() {
+  cd "${_pkgname}"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
 build() {
-  cd "${pkgname}"
+  cd "${_pkgname}"
 
   mvn -DskipTests clean package
 }
 
 package() {
-  cd "${pkgname}"
+  cd "${_pkgname}"
 
   install -d "$pkgdir/usr/bin/" "$pkgdir/usr/share/${pkgname}"
   install -Dm644 target/ysoserial-*.jar "$pkgdir/usr/share/${pkgname}/"

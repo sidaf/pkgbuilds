@@ -1,5 +1,5 @@
 pkgname='bettercap'
-pkgver='1.6.1'
+pkgver='1.6.2'
 pkgrel=1
 pkgdesc='A complete, modular, portable and easily extensible MITM framework.'
 url='https://github.com/evilsocket/bettercap'

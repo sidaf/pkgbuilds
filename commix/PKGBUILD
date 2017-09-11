@@ -1,5 +1,5 @@
 pkgname='commix'
-pkgver=1.9.20170502
+pkgver=2.0.20170714
 pkgrel=1
 pkgdesc='Automated All-in-One OS Command Injection and Exploitation Tool.'
 url='https://github.com/stasinopoulos/commix'
@@ -8,7 +8,7 @@ license=('custom')
 depends=('python2')
 makedepends=('git')
 options=('!strip' '!emptydirs')
-source=("git+https://github.com/stasinopoulos/commix.git#tag=v1.9-20170502")
+source=("git+https://github.com/stasinopoulos/commix.git#tag=v2.0-20170714")
 sha1sums=('SKIP')
 
 package() {
