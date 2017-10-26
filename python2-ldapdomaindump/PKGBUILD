@@ -1,0 +1,25 @@
+pkgname='python2-ldapdomaindump'
+pkgver='0.8.5'
+pkgrel=1
+pkgdesc='Active Directory information dumper via LDAP.'
+arch=('any')
+url='https://github.com/dirkjanm/ldapdomaindump'
+license=('custom')
+depends=('python2' 'python2-dnspython' 'python2-ldap3')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/ce/eb/f137f590fc347a7d1b389b176c3503564634d96a7861af671a1086e4bd06/ldapdomaindump-${pkgver}.tar.gz")
+sha1sums=('513ab02f33e25a2bc19e316085d1516343c7c45d')
+
+build() {
+  cd "ldapdomaindump-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "ldapdomaindump-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+
+  find "$pkgdir" -type f -exec sed 's|/usr/bin/env python$|/usr/bin/env python2|' -i {} \;
+}
