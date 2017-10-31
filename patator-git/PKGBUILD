@@ -1,7 +1,7 @@
 _pkgname='patator'
 pkgname="${_pkgname}-git"
 pkgver=142.ec605ef
-pkgrel=1
+pkgrel=2
 pkgdesc='A multi-purpose brute-forcer, with a modular design and a flexible usage.'
 url='https://github.com/lanjelot/patator'
 arch=('i686' 'x86_64')
